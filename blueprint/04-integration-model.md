@@ -82,6 +82,73 @@ In this pattern, a verifier requests specific attestations from the wallet. The 
 
 The [WE BUILD Conformance Specification for Credential Presentation](https://github.com/webuild-consortium/wp4-architecture/blob/blueprint/updates-jan/conformance-specs/cs-02-credential-presentation.md) describes how wallets and relying parties interoperate within the WE BUILD ecosystem. It covers presentation (request and response flows), interfaces between wallets and relying parties as well as security, privacy and interoperability requirements and same‑device and cross‑device invocation patterns.
 
+Authorisation and Mandate Management
+
+European Business Wallets need to support different forms of authorisation so that organisations can determine who may access the wallet, operate its functions and interact with services. For interoperability and legal certainty, wallet-level authorisation, organisation-issued internal authorisation should be distinguished from legal representation towards third parties.
+The Council General Approach ST 7659/26 reflects this distinction. Recital 18 states that EBW authorisations are technical in nature and do not create, limit or otherwise affect powers of attorney or legal mandates under applicable national or Union law. Article 5(1)(j) similarly provides for multiple users to access and operate an EBW without prejudice to any power of attorney or legal mandate.
+
+Three conceptual layers
+
+•	Layer 1 - Relationship with the organisation
+An attestation may establish that a natural person has a relationship with an organisation, for example as an employee, contractor, service provider or other associated person. Proof of Employment (PoE) belongs to this layer. The existence of such a relationship does not automatically confer authority to act on behalf of the organisation.
+•	Layer 2 - Operational or service authorisation
+The organisation may authorise a natural person, legal person or system to perform specified operations or access specific resources. Such permission may be represented through the organisation's IAM/IGA infrastructure or documented as an organisation-issued internal authorisation. An internal authorisation should not automatically be treated as an EAA unless it is issued in accordance with the applicable eIDAS framework for electronic attestation of attributes services.
+•	Layer 3 - Legal representation
+Where an operation is intended to legally bind the organisation towards third parties, the requirements of applicable Union and national law on legal representation must also be satisfied. The authority may derive from statutory representation (PoR), a power of attorney (PoA), a business register, a Digital EU Power of Attorney, notariat or another legally recognised source or instrument. Where applicable law requires an authentic form, public document, notarial intervention or another specific safeguard, the EBW authorisation mechanism does not replace that requirement.
+
+Common Authorisation Attestation model
+
+WE BUILD should aim at a common, minimal and legally neutral Authorisation Attestation model rather than separate and potentially incompatible models for each legal situation. At semantic level, the basic relationship can be expressed as Subject -> Authorisation -> Organisation.
+The common model should support, at minimum:
+•	subject of the authorisation;
+•	organisation;
+•	issuer;
+•	scope;
+•	validity period;
+•	attestation identifier.
+Where relevant to a legal or operational use case, the model should also support the source of authority, applicable jurisdiction, issuer role and competence and references to authoritative evidence or an authentic source.
+Legal basis: Article 3(43) eIDAS defines an attribute as including a right or permission. Annex VI includes powers and mandates to represent natural or legal persons among the attributes for which electronic verification against relevant public-sector authentic sources must be enabled where those attributes rely on such sources. Article 14(d)(i) of Directive (EU) 2017/1132 requires disclosure of whether persons authorised to represent a company may act alone or jointly.
+
+Scope and service-based authorisation
+
+Where possible, the scope of an Authorisation Attestation should be structured and machine-processable. A service-based authorisation may define the permitted action by reference to a service offered by a relying party, for example: Organisation A -> Person X -> Service Y -> Permitted Action Z -> Valid until T.
+A service-based authorisation does not become a legal power of representation merely because its scope is technically defined or machine-processable.
+Where the service includes an act capable of legally binding the organisation, the relying party must also determine whether applicable law requires PoR, PoA or another legally recognised form of representation.
+
+Organisation-self-issued Authorisation Attestations
+
+Organisation-self-issued Authorisation Attestations may be particularly suitable for employee permissions, internal access, operational permissions, service-based authorisations, document access, system-to-system interactions and enterprise API access. They may be documented in electronically signed or sealed form and, where appropriate, transmitted through QERDS.
+An organisation-issued internal authorisation should not automatically be labelled an EAA. Recital 55 of Regulation (EU) 2024/1183 states that any service provider issuing attested attributes in electronic form, including powers and mandates, should be considered a trust service provider of electronic attestation of attributes. Article 3(45) eIDAS defines a QEAA as an EAA issued by a qualified trust service provider. Therefore, an organisation acting merely as EBW owner should not be assumed to issue an EAA unless the applicable eIDAS requirements for the corresponding trust service are satisfied.
+A relying party should be able to verify the organisation, issuer, subject, scope, validity, revocation status and applicable restrictions. However, proof that the organisation issued the attestation is not necessarily proof that the subject holds a legally sufficient power of representation for every transaction.
+Where the attestation is protected by a qualified electronic seal, Article 35(2) eIDAS provides a presumption of integrity of the data and correctness of their origin. That presumption concerns origin and integrity; it does not, by itself, establish the legal existence, validity or sufficiency of a power of representation where applicable law requires additional safeguards.
+
+QTSP-issued Authorisation Attestations
+
+A QTSP may issue qualified electronic attestations of attributes under eIDAS. The qualified status and technical assurance of the attestation must nevertheless be distinguished from the legal source of the authority being attested.
+Article 45b(2) eIDAS gives a qualified electronic attestation of attributes, and an attestation issued by or on behalf of a public sector body responsible for an authentic source, the same legal effect as lawfully issued attestations in paper form. This does not transfer to a QTSP, merely by virtue of its status, the legal competence to create an underlying power of representation.
+Where the attestation concerns legal representation, the QTSP must have a legally sufficient basis for attesting its existence and scope. Commission Implementing Regulation (EU) 2025/1569, Article 8(3)(d), (g) and (h), requires attestation schemes to identify relevant laws, the trust model and requirements concerning the information sources on which providers rely, including authentic sources where applicable. Article 9 establishes mechanisms for verification against authentic sources or designated intermediaries for the attributes covered by Article 45e(1) eIDAS.
+
+Legal representation and authentic sources 
+
+For legal representation, the Authorisation Attestation should be capable of referring to, or being derived from, the legally relevant evidence underlying the authority.
+For PoR, evidence may derive, where applicable, from the business register, an EU Company Certificate or another legally recognised authoritative source. Directive (EU) 2017/1132 requires disclosure of the persons authorised to represent the company and whether they may act alone or jointly.
+For PoA, the digital representation of the power should be distinguished from the legal creation of the power. Article 16c of Directive (EU) 2025/25 requires the Digital EU Power of Attorney to be drawn up, amended or revoked in accordance with national requirements, including at minimum verification by courts, notaries or other competent authorities of the identity, legal capacity and authority to represent the company of the person granting, amending or revoking the power. Recital 28 preserves national rules on legal and statutory representation and other powers of attorney. Separately, notarial intervention may establish or verify the authoritative legal evidence underlying a power of representation.
+Under Article 3(47) eIDAS, an authentic source is a repository or system held under the responsibility of a public sector body or private entity that contains and provides attributes and is considered a primary source or recognised as authentic under Union or national law, including administrative practice. Where recognised under applicable national law, a repository or information system held under the responsibility of the notariat may therefore constitute an authentic source.
+The model should accommodate different national legal traditions without requiring harmonisation of national representation systems. Depending on national law, the relevant evidence may derive from a business register, a notarial system, a court or another competent authority or authentic source.
+Digitalisation of a power of representation does not imply removal of the legal controls governing its creation, validity or scope.
+
+Binding the authorisation to the natural person
+
+The system should ensure that the person using an authorisation is the person to whom it was granted. This supports security, traceability, auditability and liability. The approach should be consistent with the organisational signing model in this chapter, which binds the natural person through PID and the organisation through EBWOID.
+
+Current legal framework
+
+Operational authorisations may be implemented as Organisation -> self-issued Authorisation Attestation -> Person/System -> Service where the organisation is free to define the relevant permission internally. Legal representation should follow Legal/Authentic Source -> PoR or PoA -> Authorisation Attestation -> Wallet -> Relying Party. Where national law requires a register, notarial intervention, public document or other safeguard, that requirement remains applicable. The attestation provides a digital and interoperable evidence layer rather than replacing the legal source of authority.
+
+Key principle
+
+The European Business Wallet should digitalise the exercise and proof of authority, but should not redefine the legal source from which that authority derives. Wallet-level and administrative authorisations may be managed within the organisation and through the European Business Wallet, whereas powers of legal representation remain governed by applicable Union and national law. Where applicable law requires authoritative evidence, preventive legal control or a specific legal form, the Authorisation Attestation model should integrate those requirements into a digitally verifiable and interoperable flow rather than replace them.
+
 ## Signature and Seal Integration
 
 Wallets in WE BUILD provide the ability to create qualified electronic signatures and seals. This section describes the various integration models. For reference, see the [QES documentation](https://github.com/webuild-consortium/wp4-qtsp-group/tree/main/docs/qes).
